@@ -25,8 +25,8 @@ const app = express();
 
 const { Client } = pg;
 
-const connectionString = process.env.POSTGRES_CONN || 'postgresql://postgres:p@0.0.0.0:5432/predprofdb';
-const key = process.env.RANDOM_SECRET || 'PpLOCGxBJLYMz2WbmUpwFS8NQppMm7iK91rpTSXboYhbfOuHyULbxLBBmw2fDddtaUkie7g4RHSSakEsZFFx7XjHUUkbCGgjBOYTbtK0hLBUdHuppNAHDhVs6Cgc0mwJ';
+const connectionString = process.env.POSTGRES_CONN;
+const key = process.env.RANDOM_SECRET;
 const db = new Client({
   connectionString,
 });
@@ -53,15 +53,6 @@ app.use((req, _res, next) => {
 });
 
 
-app.use("/api/ping", (req, res, next) => {
- if (req.method === "GET") {
-   res.end(JSON.stringify({ status: 200}));
- } else {
-   next();
- }
-});
-
-
 app.use("/api/auth/sign-up", async (req, res, next) => {
   if (req.method === "POST") {
     
@@ -75,7 +66,7 @@ app.use("/api/auth/sign-up", async (req, res, next) => {
       res.status(400);
       
       res.end(JSON.stringify({ status: 400}));
-      console.log("something bas happens here");
+  
     }else{
       try{
           console.log(email);
@@ -283,7 +274,6 @@ app.use("/api/auth/selection", async (req, res) => {
       if (!name){
         res.status(400);
         res.end(JSON.stringify( {status: 400 }));
-        console.log("sth bad happens in check");
         
       } else {
         const payload = {"name": name};
